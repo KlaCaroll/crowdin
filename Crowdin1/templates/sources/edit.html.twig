@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition d'une source{% endblock %}
+
+{% block body %}
+    <h4>
+        Edition de la source "{{ source.clef }}" : 
+    </h4>
+    {{ form(form) }}
+{% endblock %}

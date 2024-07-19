@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition d'une source{% endblock %}
+
+{% block body %}
+    <h4>
+        Veuillez indiquer le nouveau titre du projet <span class="fs-3">"{{ project.nom }}"</span> : 
+    </h4>
+    {{ form(form) }}
+{% endblock %}

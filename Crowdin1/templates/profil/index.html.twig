@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+   <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .8rem;"
+      href="{{ path('profil.edit') }}" role="button">Modifier votre profil
+   </a>
+   <div class="h4 mt-4 font-weight-normal">Nom</div>
+   {{ user.nom }}
+   <div   class="h4 mt-4 font-weight-normal">Prénom</div>
+   {{ user.prenom }}
+   <div class="h4 mt-4 font-weight-normal">Adresse Mail</div>
+   {{ user.email }}
+   <div class="h4 mt-4 font-weight-normal">Vous êtes</div>
+   {{ user.profil }}
+   <div class="h4 mt-4 font-weight-normal">Description</div>
+   {{ user.description | nl2br}}
+   {% if user.description == NULL %}
+      <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem;"
+         href="{{ path('profil.edit') }}" role="button">Ajouter une  description
+      </a>
+   {% endif %}
+   <div class="h4 mt-4 font-weight-normal">Langues : </div>
+   <div class="mt-2">
+      <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .7rem;"
+         href="{{ path('langues.create') }}" role="button">Ajouter langue
+      </a>
+   </div>
+   <ul class="list-group">
+   {% for langue in langues %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+         {{ language_name(langue.nom) }}
+         <span class="badge text-primary rounded-pill">Niveau - {{ langue.niveau }}</span>
+         <div>
+            <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+               href="{{ path('langue.edit', {'id': langue.id}) }}" role="button">Editer langue
+            </a>
+            <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+               href="{{ path('langue.delete', {'id': langue.id}) }}" role="button">Effacer langue
+            </a>
+         </div>
+      </li>
+   {% endfor %}
+   </ul>
+{% endblock %}

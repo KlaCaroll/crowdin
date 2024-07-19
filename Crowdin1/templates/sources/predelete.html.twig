@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les sources{% endblock %}
+
+{% block body %}
+    {% if traductions %}
+        <span class="fs-4 text-danger">--Attention-- Cette source possède des traductions :<br>
+        Si vous voulez vraiment l'effacer, vous devez d'abord effacer ses "traductions" 
+        <br>avant de pouvoir la supprimer.</span>
+        <div>
+            <a class="btn btn-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                href="{{ path('sources.index', {'projectId': projectId}) }}" role="button">Retourner au projet
+            </a>
+        </div>
+    {% else %}
+        Valider l'effacement de la source : <span class="fs-5 ms-2 me-3">"{{ source.contenu }}"</span>
+        <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+            href="{{ path('sources.delete', {'id': sourceId, 'projectId': projectId}) }}" role="button">Effacer source
+        </a>
+        <div>
+            <a class="btn btn-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                href="{{ path('sources.index', {'projectId': projectId}) }}" role="button">Retourner au projet
+            </a>
+        </div>
+    {% endif %}
+    
+{% endblock %}

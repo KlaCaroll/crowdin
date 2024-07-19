@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les sources{% endblock %}
+
+{% block body %}
+    <h4>
+        Les sources du projet : <span class="fs-3">{{ project.nom }}</span>
+    </h4>
+    <h6>projet en : <span class="fs-5 ms-2 me-3">{{ language_name(project.langueoriginale) }}</span> à traduire en : <span class="fs-5 ms-2">{{ language_name(project.languetraduction1) }}
+    {% if project.languetraduction2 != NULL %}
+        <span class="fs-5 ms-2">/ {{ language_name(project.languetraduction2) }}</span>
+    {% endif %}
+    {% if project.languetraduction3 != NULL %}
+        <span class="fs-5 ms-2">/ {{ language_name(project.languetraduction3) }}</span>
+    {% endif %}
+    </span></h6>
+    <span class="badge text-dark rounded-pill fw-light">
+        (créé le {{ project.getCreatedAt()|date('Y-m-d') }})
+        (modifié le {{ project.getUpdatedAt()|date('Y-m-d') }})
+    </span>
+    <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;"
+        href="{{ path('projects.edit', {'id': projectId}) }}" role="button">Editer le projet
+    </a>
+    <p>
+        <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+            href="{{ path('project.delete', {'id': projectId}) }}" role="button">Effacer le projet
+        </a>
+    </p>
+    <ul class="list-group">
+        {% for source in sources %}
+        <li>
+            <h5 class="h5 mt-5 font-weight-normal">{{ source.clef }} (clef)</h5>
+            <span class="badge text-dark rounded-pill fw-light">
+                (créé le {{ source.getCreatedAt()|date('Y-m-d') }})
+                (modifié le {{ source.getUpdatedAt()|date('Y-m-d') }})
+            </span>
+            <h5 class="h5 mt-3 font-weight-normal">Contenu</h5>
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                {{ source.contenu | nl2br }}
+                <a class="btn btn-primary btn-sm" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                    href="{{ path('traductions.index', {'sourceId': source.id, 'projectId': project.id}) }}" role="button">Voir les traductions
+                </a>
+            </div>
+            <div class="mt-2">
+                <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+                href="{{ path('sources.edit', {'id': source.id, 'projectId': projectId}) }}" role="button">Editer source</a>
+                <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+                href="{{ path('sources.predelete', {'id': source.id, 'projectId': projectId}) }}" role="button">Effacer source</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    <a class="btn btn-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+    href="{{ path('sources.create', {'projectId': projectId}) }}" role="button">Créer une nouvelle source</a>
+{% endblock %}

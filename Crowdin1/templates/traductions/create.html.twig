@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Traductions{% endblock %}
+
+{% block body %}
+    <h1>
+        Créer une nouvelle traduction en <span class="text-primary ms-2">"{{ language_name(langue) }}"</span> pour : 
+    </h1>
+    <div class="fs-4 ms-2 mt-4 mb-4">
+        "{{ source.contenu }}"
+    </div>
+    {{ form(form) }}
+    <a class="btn btn-outline-primary btn-sm" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+        href="{{ path('traductions.index', {'sourceId': sourceId, 'projectId': projectId}) }}" role="button">Retour aux traductions
+    </a>
+{% endblock %}

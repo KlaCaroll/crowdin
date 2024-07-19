@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Traductions{% endblock %}
+
+{% block body %}
+    {% if traductions %}
+    <p>
+        Voici les traductions de la source <span class="fs-4 ms-2">"{{ source.contenu }}"</span> : 
+    </p>
+    {% if user_id == 0 %}
+        <p class="fw-lighter">
+            Pour voir la fiche des traducteurs, ou rajouter une traduction, veuillez vous connecter
+        </p>
+    {% endif %}
+    <ul class="list-group">
+        {% for traduction in traductions %}
+        <li>
+            <h5 class="h5 mt-5 font-weight-normal"><span class="text-primary ms-2">(langue : {{ language_name(traduction.langue) }}) :</span> <span class="badge text-dark rounded-pill fw-light">postée le ({{ traduction.getCreatedAt()|date('Y-m-d') }})</span><br>
+             {{ traduction.contenu | nl2br }} </h5>
+        </li>
+        {% if user_id != 0 %}
+            {% if user_id == project.user.id or user_id == traduction.traducteur %}
+            <div class="mt-2">
+                <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+                    href="{{ path('traductions.delete', {'id': traduction.id, 'projectId': projectId, 'sourceId': source.id}) }}" role="button">Effacer traduction
+                </a>
+            </div>
+            {% endif %}
+            <div>
+                <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+                    href="{{ path('profil.visit', {'userId': traduction.traducteur}) }}" target="_blank" role="button">Voir la fiche du traducteur
+                </a>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% else %}
+        Pas de traduction pour la source <span class="fs-4 ms-2">"{{ source.contenu }}"</span>
+        {% if user_id == 0 %}
+            <p class="fw-lighter">
+                Pour voir la fiche des traducteurs, ou rajouter une traduction, veuillez vous connecter
+            </p>
+        {% endif %}
+    {% endif %}
+    {% if user_id != 0 %}
+        <div>
+            <div class="mt-4">
+                <span class="fs-6 text-danger-emphasis ms-2 text-opacity-75">Ajouter une traduction en : </span>
+                <a class="btn btn-outline-dark btn-sm mt-5" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                    href="{{ path('traductions.create', {'sourceId': source.id, 'projectId': project.id, 'langue': project.languetraduction1}) }}" role="button">{{ language_name(project.languetraduction1) }} 
+                </a>
+                {% if project.languetraduction2 != NULL %}
+                    <a class="btn btn-outline-dark btn-sm mt-5" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                        href="{{ path('traductions.create', {'sourceId': source.id, 'projectId': project.id, 'langue': project.languetraduction2}) }}" role="button">{{ language_name(project.languetraduction2) }} 
+                    </a>
+                {% endif %}
+                {% if project.languetraduction3 != NULL %}
+                    <a class="btn btn-outline-dark btn-sm mt-5" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                        href="{{ path('traductions.create', {'sourceId': source.id, 'projectId': project.id, 'langue': project.languetraduction3}) }}" role="button">{{ language_name(project.languetraduction3) }} 
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+    <div>
+    {% if user_id != 0 %}
+        {% if user_id == project.user.id %}
+            <a class="btn btn-primary btn-sm mt-5" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                href="{{ path('sources.index', {'projectId': project.id}) }}" role="button">Retour au projet 
+            </a>
+        {% else %}
+            <a class="btn btn-primary btn-sm mt-5" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+                href="{{ path('sources.visit', {'projectId': project.id}) }}" role="button">Retour au projet 
+            </a>
+        {% endif %}
+    {% else %}
+        <a class="btn btn-primary btn-sm mt-5" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+            href="{{ path('sources.visit', {'projectId': project.id}) }}" role="button">Retour au projet 
+        </a>
+    {% endif %}
+    </div>
+{% endblock %}

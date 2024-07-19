@@ -1,0 +1,2 @@
+php -S localhost:8987 -t public
+php bin/console --version

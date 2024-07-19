@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Les projets{% endblock %}
+
+{% block body %}
+    <h4>
+        Tous les projets existants :
+    </h4>
+    <ul class="list-group">
+        {% for project in projects %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <a href="{{ path('sources.visit', {'projectId': project.id}) }}" class="text-decoration-none"   >
+                {{ project.nom }}
+            </a>
+        <span class="badge text-dark rounded-pill">
+            projet en : <span class="fs-6 ms-2 me-3">{{ language_name(project.langueoriginale) }}</span> à traduire en : <span class="fs-6 ms-2">{{ language_name(project.languetraduction1) }}</span>
+            {% if project.languetraduction2 != NULL %}
+                <span class="fs-6 ms-2">/ {{ language_name(project.languetraduction2) }}</span>
+            {% endif %}
+            {% if project.languetraduction3 != NULL %}
+                <span class="fs-6 ms-2">/ {{ language_name(project.languetraduction3) }}</span>
+            {% endif %}
+        </span>
+        <span class="badge text-dark rounded-pill">
+            (créé le {{ project.getCreatedAt()|date('Y-m-d') }})
+        </span>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
