@@ -1,3 +1,5 @@
+{# templates/sources/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
 {% block title %}Les sources{% endblock %}
@@ -26,6 +28,15 @@
             href="{{ path('project.delete', {'id': projectId}) }}" role="button">Effacer le projet
         </a>
     </p>
+    
+    {# Formulaire de blocage/déblocage #}
+    <h3>Bloquer/Débloquer le Projet</h3>
+    <p>Statut actuel : {{ project.bloque ? 'Bloqué' : 'Non bloqué' }}</p>
+    {{ form_start(form) }}
+        {{ form_widget(form.block) }}
+        {{ form_widget(form.unblock) }}
+    {{ form_end(form) }}
+
     <ul class="list-group">
         {% for source in sources %}
         <li>

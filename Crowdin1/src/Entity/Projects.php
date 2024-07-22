@@ -52,6 +52,10 @@ class Projects
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $languetraduction3 = null;
 
+    #[ORM\Column(type: "boolean")]
+    private $bloque = false;
+    
+
     public function __construct()
     {
         $this->sources = new ArrayCollection();
@@ -98,6 +102,7 @@ class Projects
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Sources>
@@ -193,6 +198,18 @@ class Projects
     public function setLanguetraduction3(?string $languetraduction3): static
     {
         $this->languetraduction3 = $languetraduction3;
+
+        return $this;
+    }
+
+    public function isBloque(): bool
+    {
+        return $this->bloque;
+    }
+
+    public function setBloque(bool $bloque): self
+    {
+        $this->bloque = $bloque;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Sources;
 use App\Entity\Projects;
+use App\Form\BlockProjectType;
 use App\Form\SourcesType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,15 +19,33 @@ use App\Repository\TraductionsRepository;
 class SourcesController extends AbstractController
 {
     #[Route('/sources', name: 'sources.index')]
-    public function index(Request $request, SourcesRepository $repository, ProjectsRepository $projectrepo, TraductionsRepository $traductionsrepo): Response
+    public function index(Request $request, SourcesRepository $repository, ProjectsRepository $projectrepo, TraductionsRepository $traductionsrepo, EntityManagerInterface $em): Response
     {
         $projectId = $_GET['projectId'];
         $sources = $repository->findByProjectId($projectId);
         $project = $projectrepo->findProjectById($projectId);
+
+        // Formulaire de blocage/déblocage du projet
+        $form = $this->createForm(BlockProjectType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('block')->isClicked()) {
+                $project->setBloque(true);
+            } elseif ($form->get('unblock')->isClicked()) {
+                $project->setBloque(false);
+            }
+            
+            $em->persist($project);
+            $em->flush();
+            return $this->redirectToRoute('sources.index', ['projectId' => $projectId]);
+        }
+
         return $this->render('sources/index.html.twig', [
             'sources' => $sources,
             'projectId' => $projectId,
-            'project' => $project
+            'project' => $project,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -36,9 +55,17 @@ class SourcesController extends AbstractController
         $projectId = $_GET['projectId'];
         $sources = $repository->findByProjectId($projectId);
         $project = $projectrepo->findProjectById($projectId);
+
+         // Vérifier si le projet est bloqué
+         if ($project->isBloque()) {
+            $this->addFlash('error', 'Ce projet est actuellement bloqué.');
+            return $this->redirectToRoute('projects.index'); // Redirige vers une page d'erreur ou la page d'accueil
+        }
+
         $user_id = $project->getUser();
         $user_connected = $this->getUser();
         $user = $userrepo->findUserById($user_id);
+
         return $this->render('sources/visit.html.twig', [
             'sources' => $sources,
             'project' => $project,
