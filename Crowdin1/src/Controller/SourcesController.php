@@ -25,7 +25,6 @@ class SourcesController extends AbstractController
         $sources = $repository->findByProjectId($projectId);
         $project = $projectrepo->findProjectById($projectId);
 
-        // Formulaire de blocage/déblocage du projet
         $form = $this->createForm(BlockProjectType::class);
         $form->handleRequest($request);
 
@@ -56,7 +55,6 @@ class SourcesController extends AbstractController
         $sources = $repository->findByProjectId($projectId);
         $project = $projectrepo->findProjectById($projectId);
 
-         // Vérifier si le projet est bloqué
          if ($project->isBloque()) {
             $this->addFlash('error', 'Ce projet est actuellement bloqué.');
             return $this->redirectToRoute('projects.index'); 
