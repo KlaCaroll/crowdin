@@ -59,7 +59,7 @@ class SourcesController extends AbstractController
          // Vérifier si le projet est bloqué
          if ($project->isBloque()) {
             $this->addFlash('error', 'Ce projet est actuellement bloqué.');
-            return $this->redirectToRoute('projects.index'); // Redirige vers une page d'erreur ou la page d'accueil
+            return $this->redirectToRoute('projects.index'); 
         }
 
         $user_id = $project->getUser();

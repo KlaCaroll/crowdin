@@ -16,6 +16,7 @@ class BlockProjectType extends AbstractType
                 'label' => 'Bloquer le projet',
                 'attr' => ['class' => 'btn btn-danger']
             ])
+            
             ->add('unblock', SubmitType::class, [
                 'label' => 'Débloquer le projet',
                 'attr' => ['class' => 'btn btn-success']

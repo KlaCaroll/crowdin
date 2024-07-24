@@ -23,20 +23,18 @@
     <a class="btn btn-outline-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;"
         href="{{ path('projects.edit', {'id': projectId}) }}" role="button">Editer le projet
     </a>
-    <p>
-        <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
-            href="{{ path('project.delete', {'id': projectId}) }}" role="button">Effacer le projet
-        </a>
-    </p>
+    <a class="btn btn-outline-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;"
+        href="{{ path('project.delete', {'id': projectId}) }}" role="button">Effacer le projet
+    </a>
     
-    {# Formulaire de blocage/déblocage #}
     <h3>Bloquer/Débloquer le Projet</h3>
     <p>Statut actuel : {{ project.bloque ? 'Bloqué' : 'Non bloqué' }}</p>
     {{ form_start(form) }}
-        {{ form_widget(form.block) }}
-        {{ form_widget(form.unblock) }}
+        <div class="mt-2">
+            {{ form_widget(form.block, {'attr': {'class': 'btn btn-outline-primary', 'style': '--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;'}}) }}
+            {{ form_widget(form.unblock, {'attr': {'class': 'btn btn-outline-danger', 'style': '--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .55rem;'}}) }}
+        </div>
     {{ form_end(form) }}
-
     <ul class="list-group">
         {% for source in sources %}
         <li>
