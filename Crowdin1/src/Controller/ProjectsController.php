@@ -46,7 +46,8 @@ class ProjectsController extends AbstractController
             $project->setUpdatedAt(new \DateTimeImmutable());
             $em->persist($project);
             $em->flush();
-            return $this->redirectToRoute('projects.show');
+            $projectId = $project->getId();
+            return $this->redirectToRoute('sources.index', ['projectId' => $projectId]);
         }
         return $this->render('projects/create.html.twig', [
             'form' => $form

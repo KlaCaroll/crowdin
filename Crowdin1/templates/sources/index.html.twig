@@ -5,7 +5,7 @@
 
 {% block body %}
     <h4>
-        Les sources du projet : <span class="fs-3">{{ project.nom }}</span>
+        "<span class="fs-3">{{ project.nom }}</span>"
     </h4>
     <h6>projet en : <span class="fs-5 ms-2 me-3">{{ language_name(project.langueoriginale) }}</span> à traduire en : <span class="fs-5 ms-2">{{ language_name(project.languetraduction1) }}
     {% if project.languetraduction2 != NULL %}
