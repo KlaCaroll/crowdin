@@ -6,15 +6,22 @@ use App\Entity\Sources;
 use App\Entity\Projects;
 use App\Form\BlockProjectType;
 use App\Form\SourcesType;
+use App\Form\CsvImportType;
+use App\Service\CsvService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\SourcesRepository;
 use App\Repository\ProjectsRepository;
 use App\Repository\UsersRepository;
 use App\Repository\TraductionsRepository;
+
 
 class SourcesController extends AbstractController
 {
@@ -39,12 +46,16 @@ class SourcesController extends AbstractController
             $em->flush();
             return $this->redirectToRoute('sources.index', ['projectId' => $projectId]);
         }
+        $importForm = $this->createForm(CsvImportType::class, null, [
+            'action' => $this->generateUrl('sources.import', ['projectId' => $projectId]),
+        ]);
 
         return $this->render('sources/index.html.twig', [
             'sources' => $sources,
             'projectId' => $projectId,
             'project' => $project,
             'form' => $form->createView(),
+            'importForm' => $importForm->createView(),
         ]);
     }
 
@@ -91,6 +102,76 @@ class SourcesController extends AbstractController
             'form' => $form
         ]);
     }
+
+
+    private CsvService $csvService;
+
+    public function __construct(CsvService $csvService)
+    {
+        $this->csvService = $csvService;
+    }
+    
+    #[Route('/sources/import', name: 'sources.import')]
+    public function import(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CsvImportType::class);
+        $projectId = $_GET['projectId'];
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $csvFile = $form->get('csv_file')->getData();
+            if ($csvFile) {
+                if (!$projectId) {
+                    // Handle the case where projectId is missing
+                    $this->addFlash('error', 'Project ID is required.');
+                    return $this->redirectToRoute('sources.index');
+                }
+                $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+                $this->csvService->handleCsvImport($csvFile, (int)$projectId, $em);
+                return $this->redirectToRoute('sources.index', ['projectId' => $projectId]);
+            }
+        }
+
+        return $this->render('sources/index.html.twig', [
+            'form' => $form->createView(),
+            'projectId' => $projectId,
+        ]);
+    }
+
+    #[Route('/sources/export', name: 'sources.export')]
+    public function export(Request $request, EntityManagerInterface $em, SourcesRepository $repository, ProjectsRepository $projectrepo, TraductionsRepository $traductionsrepo): StreamedResponse
+    {
+        $projectId = $_GET['projectId'];
+
+        $response = new StreamedResponse(function () use ($repository, $projectId, $traductionsrepo) {
+            $handle = fopen('php://output', 'w+');
+            
+            fputcsv($handle, ['name', 'text', 'lang']);
+            
+            $sources = $repository->findByProjectId($projectId);
+            
+            foreach ($sources as $source) {
+                $traductions = $traductionsrepo->findBySourceId($source);
+                
+                foreach ($traductions as $traduction) {
+                    fputcsv($handle, [
+                        $source->getClef(),
+                        $traduction->getContenu(),
+                        $traduction->getLangue()
+                    ]);
+                }
+            }
+            
+            fclose($handle);
+        });
+
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export_sources.csv"');
+
+        return $response;
+    }
+
 
     #[Route('/sources/{id}/edit', name: 'sources.edit')]
     public function edit(Request $request, Sources $source, EntityManagerInterface $em): Response
