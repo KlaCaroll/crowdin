@@ -123,7 +123,6 @@ class SourcesController extends AbstractController
             $csvFile = $form->get('csv_file')->getData();
             if ($csvFile) {
                 if (!$projectId) {
-                    // Handle the case where projectId is missing
                     $this->addFlash('error', 'Project ID is required.');
                     return $this->redirectToRoute('sources.index');
                 }
