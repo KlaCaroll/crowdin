@@ -51,7 +51,9 @@ La base de donnée doit être crée sans erreurs
 ## Migration des tables 
 
 Saisir:
+demarrer un instance de migration
 ```php bin/console make:migration```
+appliquer les migrations vers la DB
 ```php bin/console doctrine:migrations:migrate```
 afin de lancer la migrations des tables.
 Puis remplir la DB avec des données initiales qui seront utiles pour la création des controllers 
