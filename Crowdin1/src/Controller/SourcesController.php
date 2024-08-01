@@ -126,6 +126,15 @@ class SourcesController extends AbstractController
                     $this->addFlash('error', 'Project ID is required.');
                     return $this->redirectToRoute('sources.index');
                 }
+
+                $mimeType = $csvFile->getMimeType();
+                $extension = $csvFile->guessExtension();
+
+                if ($mimeType !== 'text/csv' && $extension !== 'csv') {
+                    $this->addFlash('error', 'Invalid file type. Please upload a CSV file.');
+                    return $this->redirectToRoute('sources.index', ['projectId' => $projectId]);
+                }
+
                 $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
                 $this->csvService->handleCsvImport($csvFile, (int)$projectId, $em);
                 return $this->redirectToRoute('sources.index', ['projectId' => $projectId]);
