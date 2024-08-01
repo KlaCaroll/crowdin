@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block body %}
+    <div class="d-flex flex-column" style="min-height: 90vh;">
+        <ul class="list-group flex-grow-1 overflow-auto" style="max-height: calc(90vh - 200px);">
+            {% for message in messages %}
+                {% if message.author == user_connected_id %}
+                    <div class="border rounded-2 p-3 bg-primary bg-opacity-25 mb-2">
+                        <div class="d-flex flex-row justify-content-between">
+                            <span>
+                                <span class="fw-bolder">vous</span> : <span>{{message.message}}</span>
+                            </span>
+                            <a class="btn btn-outline-danger" href="{{ path('message.delete', {'chatId': chatId, 'messageId': message.id}) }}" role="button">
+                                <i class="bi bi-trash3"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% elseif message.author == user1.id and message.author != user_connected_id%}
+                    <div class="border rounded-2 p-3 bg-white bg-opacity-75 mb-2">
+                        <span class="fw-bolder">{{user1.prenom}}</span> : <span>{{message.message}}</span>
+                    </div>
+                {% elseif message.author == user2.id and message.author != user_connected_id%}
+                    <div class="border rounded-2 p-3 bg-white bg-opacity-75 mb-2">
+                        <span class="fw-bolder">{{user2.prenom}}</span> : <span>{{message.message}}</span>
+                    </div>           
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <div class="mt-auto">
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}

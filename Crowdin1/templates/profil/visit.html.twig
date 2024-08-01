@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfilController!{% endblock %}
+{% block title %}Profil de l'auteur{% endblock %}
 
 {% block body %}
    {# <a class="btn btn-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
@@ -25,5 +25,5 @@
    {% endfor %}
    </ul>
    <a class="btn btn-outline-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-   href="mailto:{{ user.email }}" role="button">contacter {{ user.prenom }}</a>
+   href="{{ path('chat.create', {'userId': user.id}) }}" role="button">chatter avec {{ user.prenom }}</a>
 {% endblock %}

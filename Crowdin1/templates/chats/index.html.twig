@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes Tchats{% endblock %}
+
+{% block body %}
+    {% if chatdata == [] %}
+        <h4>Vous n'avez pas encore de Tchat</h4>
+        Visitez la page de profil d'un utilisateur pour lui envoyer un message.
+    {% else %}
+        <ul class="list-group">
+            {% for chat in chatdata %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{{ path('messages.index', {'chatId': chat.chat.id}) }}" class="text-decoration-none">
+                    Tchat avec {{ chat.otherUser.prenom }}
+                </a>
+                {% if  chat.chat.messagesCount != chat.notif.messageCount %}
+                    <span class="text-danger" style="font-size: 1rem;">(nouveau(x) message(s)!)</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

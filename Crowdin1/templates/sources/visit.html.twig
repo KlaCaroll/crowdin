@@ -15,12 +15,18 @@
     {% endif %}
     </span></h6>
     {% if user_connected != NULL %}
-        <p>
-            Projet créé par : 
-            <a href="{{ path('profil.visit', {'userId': user.id}) }}" target="_blank">
-                <span class="fs-5">{{ user.prenom }} {{ user.nom }}</span>
-            </a>
-        </p>
+        {% if user_connected.id == user.id %}
+            <p>
+                <span class="fs-5">Vous avez créé ce projet</span>
+            </p>
+        {% else %}
+            <p>
+                Projet créé par : 
+                <a href="{{ path('profil.visit', {'userId': user.id}) }}" target="_blank">
+                    <span class="fs-5">{{ user.prenom }} {{ user.nom }}</span>
+                </a>
+            </p>
+        {% endif %}
     {% else %}
         <p class="fw-lighter">
             Pour voir la fiche du chef de projet, veuillez vous connecter

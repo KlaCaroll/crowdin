@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Sources;
 use App\Entity\Projects;
 use App\Form\BlockProjectType;
@@ -21,7 +20,6 @@ use App\Repository\SourcesRepository;
 use App\Repository\ProjectsRepository;
 use App\Repository\UsersRepository;
 use App\Repository\TraductionsRepository;
-
 
 class SourcesController extends AbstractController
 {
@@ -103,14 +101,13 @@ class SourcesController extends AbstractController
         ]);
     }
 
-
     private CsvService $csvService;
 
     public function __construct(CsvService $csvService)
     {
         $this->csvService = $csvService;
     }
-    
+
     #[Route('/sources/import', name: 'sources.import')]
     public function import(Request $request, EntityManagerInterface $em): Response
     {
@@ -179,7 +176,6 @@ class SourcesController extends AbstractController
 
         return $response;
     }
-
 
     #[Route('/sources/{id}/edit', name: 'sources.edit')]
     public function edit(Request $request, Sources $source, EntityManagerInterface $em): Response

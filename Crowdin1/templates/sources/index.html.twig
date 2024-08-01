@@ -64,25 +64,26 @@
         {% endfor %}
     </ul>
     <div class="mb-4">
-        <a class="btn btn-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-        href="{{ path('sources.create', {'projectId': projectId}) }}" role="button">Créer une nouvelle source</a>
-    </div>
+            <a class="btn btn-primary btn-sm mt-4" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+            href="{{ path('sources.create', {'projectId': projectId}) }}" role="button">Créer une nouvelle source</a>
+        </div>
 
 
 
-    <div class="mb-4">
-        {{ form_start(importForm, { 'attr': {'style': 'display: inline-block;'} }) }}
-            {{ form_widget(importForm.csv_file, { 'attr': {'class': 'form-control d-inline-block w-auto'} }) }}
-            <div class="mt-2">
-                <button class="btn btn-primary btn-sm" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Import</button>
-            </div>
-        {{ form_end(importForm) }}
-    </div>
-    
+        <div class="mb-4">
+            {{ form_start(importForm, { 'attr': {'style': 'display: inline-block;'} }) }}
+                {{ form_widget(importForm.csv_file, { 'attr': {'class': 'form-control d-inline-block w-auto'} }) }}
+                <div class="mt-2">
+                    <button class="btn btn-primary btn-sm" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">Import</button>
+                </div>
+            {{ form_end(importForm) }}
+        </div>
+        
 
-    <div class="mb-4">
-    <a class="btn btn-secondary btn-sm" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-        href="{{ path('sources.export', {'projectId': projectId}) }}" role="button">Export Sources</a>
-    </div>
+        <div class="mb-4">
+        <a class="btn btn-secondary btn-sm" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
+            href="{{ path('sources.export', {'projectId': projectId}) }}" role="button">Export Sources</a>
+        </div>
 
-{% endblock %}
+    {% endblock %}
+
